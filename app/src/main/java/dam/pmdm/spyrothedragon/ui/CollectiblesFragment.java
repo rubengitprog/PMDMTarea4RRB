@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,7 +39,7 @@ public class CollectiblesFragment extends Fragment {
         collectiblesList = new ArrayList<>();
         adapter = new CollectiblesAdapter(collectiblesList);
         recyclerView.setAdapter(adapter);
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         loadCollectibles();
         return binding.getRoot();
     }

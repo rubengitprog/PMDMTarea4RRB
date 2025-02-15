@@ -1,6 +1,10 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.SpyroTheDragon" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <!-- Base application theme -->
+    <style name="Theme.SpyroTheDragon" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Usar Toolbar en lugar de ActionBar -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
         <item name="colorPrimary">@color/purple</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
@@ -8,6 +12,5 @@
 
         <item name="android:windowSplashScreenBackground">@color/purple</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash</item>
-
     </style>
 </resources>
