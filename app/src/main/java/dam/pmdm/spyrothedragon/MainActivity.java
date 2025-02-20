@@ -214,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             default:
+                saveBoleeanNeedGuide();
                 musicOn();
                 guideBinding.guideLayout.setVisibility(View.GONE); // Oculta la guía cuando terminan los pasos
                 return;
@@ -397,6 +398,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private void exitGuide(View view) {
         guideBinding.guideLayout.setVisibility(View.INVISIBLE);
+        saveBoleeanNeedGuide();
+
+    }
+
+    private void saveBoleeanNeedGuide() {
         needGuide = false;
         saveBooleanToSharedPreferences(needGuide);
     }
