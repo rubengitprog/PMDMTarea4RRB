@@ -1,6 +1,7 @@
 package dam.pmdm.spyrothedragon;
 
 import android.animation.ValueAnimator;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.animation.Animator;
@@ -31,16 +32,13 @@ import dam.pmdm.spyrothedragon.databinding.WelcomeguideBinding;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    //RECORDAR GUARDAR EL BOOLEAN EN EL SHAREDPREFENCES Y QUE SE RECUPERE AL INICIAR LA APP
-    // EN EL ONCREATE OBTENERBOOLEAN(); Y QUE EL MÉTODOO RECUPERE EL VALOR DEL SHARED PREFERENCES
-
     MediaPlayer mediaPlayer;
     private FrameLayout rootLayout;
     private WelcomeguideBinding welcomeguideBinding;
     private GuideBinding guideBinding;
     private ActivityMainBinding binding;
     private NavController navController;
-    boolean needGuide = true;
+    boolean needGuide;
     private AnimatorSet currentAnimation;
     private MenuItem aboutMenuItem;
     private int currentStep = 0;  // Variable para rastrear el paso actual
@@ -73,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
         binding.navView.setOnItemSelectedListener(this::selectedBottomMenu);
 
         //Obtener preferencias de usuarios para mostrar o no la guía
-        getBooleanFromSharedPreferences();
-        configureParticles();
+        needGuide = getBooleanFromSharedPreferences();
         if (needGuide) {
 
             // Inflar la guía usando el layout @layout/guide
@@ -88,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
             rootLayout = findViewById(R.id.mainFrame);
             rootLayout.addView(welcomeguideBinding.getRoot());
             welcomeguideBinding.getRoot().setVisibility(View.VISIBLE);
-            // Hacer visible la guía cuando sea necesario
+
+
             guideBinding.getRoot().setVisibility(View.VISIBLE);
+            // Hacer visible la guía al pulsar el botón de inicio
             welcomeguideBinding.btnStart.setOnClickListener(v -> configureGuide());
         }
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
@@ -115,18 +114,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void configureParticles() {
-    }
 
-
-    private void getBooleanFromSharedPreferences() {
-
-
+    private boolean getBooleanFromSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+        return sharedPreferences.getBoolean("needGuide", true); // Devuelve true por defecto si no existe
     }
 
     private void configureGuide() {
-        Log.d(TAG, "Iniciando la guía");
-
         // Crear animación de desvanecimiento
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(welcomeguideBinding.getRoot(), "alpha", 1f, 0f);
         fadeOut.setDuration(500); // Duración de 1 segundo para el desvanecimiento
@@ -140,13 +134,9 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 // Cambiar la visibilidad a GONE después de la animación
-
                 welcomeguideBinding.particleView.setVisibility(View.VISIBLE); // Asegúrate de que las partículas sean visibles
-
-                // Ahora, mostramos el siguiente layout de la guía
-                guideBinding.btnExit.setVisibility(View.VISIBLE);
                 guideBinding.btnNext.setVisibility(View.VISIBLE);
-
+                guideBinding.btnExit.setVisibility(View.VISIBLE);
                 // Asignar los listeners para los botones después de que la animación termine
                 guideBinding.btnExit.setOnClickListener(v -> exitGuide(v));
                 guideBinding.btnNext.setOnClickListener(v -> nextGuideStep());
@@ -155,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                 nextGuideStep(); // Este método se ejecuta al mostrar el primer paso de la guía
             }
         });
-
         // Iniciar la animación de desvanecimiento
         fadeOut.start();
     }
@@ -171,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (currentStep) {
             case 0:
-                showGuideStep(guideBinding.pulseImage, "Aquí podrás explorar a todos los personajes del mundo de Spyro.", R.id.navigation_characters, 0);
+                showGuideStep(guideBinding.pulseImage, getString(R.string.guideText1), R.id.navigation_characters, 0);
                 movePulseImage(0);  // Primer ítem de BottomNav
                 moveArrowTo(0);
                 break;
@@ -179,27 +168,27 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 movePulseImage(1);  // Segundo ítem de BottomNav
                 moveArrowTo(1);
-                showGuideStep(guideBinding.pulseImage, "Descubre los mundos de Spyro", R.id.navigation_worlds, 1);
+                showGuideStep(guideBinding.pulseImage, getString(R.string.guideText2), R.id.navigation_worlds, 1);
                 break;
 
             case 2:
                 movePulseImage(2);  // Tercer ítem de BottomNav
                 moveArrowTo(2);
-                showGuideStep(guideBinding.pulseImage, "Encuentra todos los coleccionables", R.id.navigation_collectibles, 2);
+                showGuideStep(guideBinding.pulseImage, getString(R.string.guideText3), R.id.navigation_collectibles, 2);
                 break;
 
             case 3:
                 movePulseImageToTopRight();  // Parte superior derecha
                 guideBinding.arrowIndicator.setVisibility(View.GONE);
-                showGuideStep(guideBinding.pulseImage, "Aquí encontrarás más información sobre la app", R.id.navigation_characters, 3);
+                showGuideStep(guideBinding.pulseImage, getString(R.string.guideText4), R.id.navigation_characters, 3);
                 break;
 
             case 4:
                 openAboutMenu(); // Abre el menú About en este paso
-                showGuideStep(guideBinding.pulseImage, "Felicidades, ¡has completado la guía!", R.id.navigation_characters, 4);
+                showGuideStep(guideBinding.pulseImage, getString(R.string.guideText5), R.id.navigation_characters, 4);
                 guideBinding.pulseImage.setVisibility(View.GONE);
                 guideBinding.arrowIndicator.setVisibility(View.GONE);
-                guideBinding.btnNext.setText("FINALIZAR");
+                guideBinding.btnNext.setText(R.string.endText);
                 break;
 
             default:
@@ -228,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                         float pulseX = itemRect.centerX() - (guideBinding.pulseImage.getWidth() / 2f);
 
                         // Calcular la posición Y justo encima del BottomNavigationView
-                        float pulseY = itemRect.top - guideBinding.pulseImage.getHeight() - 20f;
+                        float pulseY = itemRect.top - guideBinding.pulseImage.getHeight() - (-50f);
 
                         // Mostrar y posicionar la imagen
                         guideBinding.pulseImage.setVisibility(View.VISIBLE);
@@ -317,7 +306,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showGuideStep(View pulseImage, String text, int navDestination, int index) {
-        Log.d(TAG, "Mostrando paso de la guía: " + text);
 
         // Asegurar que la animación anterior se detenga antes de empezar la nueva
         if (currentAnimation != null && currentAnimation.isRunning()) {
@@ -327,7 +315,6 @@ public class MainActivity extends AppCompatActivity {
         // Navegar al destino antes de actualizar la UI
         if (navController.getCurrentDestination() != null &&
                 navController.getCurrentDestination().getId() != navDestination) {
-            Log.d(TAG, "Navegando inmediatamente al destino: " + navDestination);
             navController.navigate(navDestination);
         }
 
@@ -367,7 +354,6 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 pulseImage.setVisibility(View.GONE);
-                Log.d(TAG, "Animación terminada para: " + text);
             }
 
             @Override
@@ -380,23 +366,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void exitGuide(View view) {
         guideBinding.guideLayout.setVisibility(View.INVISIBLE);
-        //needGuide=false;
+        needGuide = false;
+        saveBooleanToSharedPreferences(needGuide);
+    }
+
+    private void saveBooleanToSharedPreferences(boolean value) {
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("needGuide", value);
+        editor.apply();
     }
 
     private boolean selectedBottomMenu(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.nav_characters) {
-            // Desactivar el botón de retroceso (HomeAsUp) en la Toolbar para este fragmento
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             navController.navigate(R.id.navigation_characters);
 
         } else if (menuItem.getItemId() == R.id.nav_worlds) {
-            // Desactivar el botón de retroceso en la Toolbar para este fragmento
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             navController.navigate(R.id.navigation_worlds);
 
         } else {
-            // Desactivar el botón de retroceso en la Toolbar para este fragmento
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             navController.navigate(R.id.navigation_collectibles);
         }
         return true;

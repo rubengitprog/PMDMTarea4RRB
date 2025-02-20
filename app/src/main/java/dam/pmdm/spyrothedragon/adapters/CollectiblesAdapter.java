@@ -22,7 +22,7 @@ public class CollectiblesAdapter extends RecyclerView.Adapter<CollectiblesAdapte
 
     private List<Collectible> list;
     private Context context; // Necesitamos el contexto para el Toast
-    private int easterEgg = 0 ;
+    private int easterEgg = 0;
     private CollectiblesFragment collectiblesFragment;
 
     public CollectiblesAdapter(List<Collectible> collectibleList, Context context) {
@@ -48,13 +48,17 @@ public class CollectiblesAdapter extends RecyclerView.Adapter<CollectiblesAdapte
         // Detectar clic en el segundo ítem (índice 1)
         holder.itemView.setOnClickListener(v -> {
             // Incrementar easterEgg
-            if(position==1){
-                easterEgg++;
-                // Reproducir sonido click.mp3
-                MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.click);  // Asegúrate de tener el archivo click.mp3 en la carpeta res/raw
+            if (position == 1) {
+                // Reproducir sonido
+                MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.click);
                 mediaPlayer.start();
-                if(easterEgg==4){
+
+                easterEgg++;
+                //Cuando el usuario interactúe 4 veces con el item se abrirá el vídeo.
+                if (easterEgg == 4) {
                     context.startActivity(new Intent(context, VideoActivity.class));
+                    //Quitar si solo quiere mostrarse el vídeo una vez.
+                    easterEgg = 0;
                 }
             }
 

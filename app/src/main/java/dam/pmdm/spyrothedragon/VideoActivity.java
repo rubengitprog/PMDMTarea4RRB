@@ -3,19 +3,13 @@ package dam.pmdm.spyrothedragon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
-import android.widget.VideoView;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 public class VideoActivity extends AppCompatActivity {
 
@@ -25,10 +19,11 @@ public class VideoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_activity);
+        getWindow().setDecorFitsSystemWindows(false);
 
         // Configurar el VideoView
         videoView = findViewById(R.id.videoView);
-        String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.videofull;
+        String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.spyrovideoa;
         Uri uri = Uri.parse(videoPath);
 
         videoView.setVideoURI(uri);

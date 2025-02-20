@@ -1,5 +1,6 @@
 package dam.pmdm.spyrothedragon.adapters;
 
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import dam.pmdm.spyrothedragon.R;
 import dam.pmdm.spyrothedragon.models.Character;
+import dam.pmdm.spyrothedragon.views.FlameView;
 
 import java.util.List;
 
@@ -40,9 +42,13 @@ public class CharactersAdapter extends RecyclerView.Adapter<CharactersAdapter.Ch
         // Detectar la pulsación larga solo en el primer ítem (posición 0)
         if (position == 0) {
             holder.itemView.setOnLongClickListener(v -> {
-                // Aquí defines lo que sucede cuando el primer item es mantenido pulsado
-                Toast.makeText(v.getContext(), "¡Pulsación larga en el primer item!", Toast.LENGTH_SHORT).show();
-                // Retorna true para indicar que el evento ha sido manejado
+                // Hacer visible la llama cuando se pulsa largo sobre Spyro
+                holder.flameView.setVisibility(View.VISIBLE);  // Hacerlo visible
+                holder.flameView.animateFlame();  // Llama la animación
+                // Retorna true para indicar que el evento ha terminado correctamente
+                // Reproducir sonido
+                MediaPlayer mediaPlayer = MediaPlayer.create(holder.flameView.getContext(), R.raw.spyrofiresound);
+                mediaPlayer.start();
                 return true;
             });
         } else {
@@ -50,6 +56,7 @@ public class CharactersAdapter extends RecyclerView.Adapter<CharactersAdapter.Ch
             holder.itemView.setOnLongClickListener(null);
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -60,11 +67,14 @@ public class CharactersAdapter extends RecyclerView.Adapter<CharactersAdapter.Ch
 
         TextView nameTextView;
         ImageView imageImageView;
+        FlameView flameView;  // Añadido para el cono de la llama
 
         public CharactersViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.name);
             imageImageView = itemView.findViewById(R.id.image);
+            flameView = itemView.findViewById(R.id.flameView);  // Referencia a FlameView
         }
     }
+
 }

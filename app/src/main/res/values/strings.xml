@@ -6,4 +6,15 @@
     <string name="title_about">Acerca de</string>
     <string name="text_about">Aplicación desarrollada por \n <b>Rubén Robles Berlanga.</b></string>
     <string name="accept">Aceptar</string>
+    <string name="guideText1">Aquí podrás explorar a todos los personajes del mundo de Spyro.</string>
+    <string name="guideText2">Descubre los mundos de Spyro</string>
+    <string name="guideText3">Encuentra todos los coleccionables</string>
+    <string name="guideText4">Aquí encontrarás más información sobre la app</string>
+    <string name="guideText5">Felicidades, ¡has completado la guía!</string>
+    <string name="endText">FINALIZAR</string>
+    <string name="skip">SALTAR</string>
+    <string name="next">SIGUIENTE</string>
+    <string name="welcome">¡Bienvenido a la Guía de Spyro!</string>
+    <string name="start">Comenzar</string>
+    <string name="info">Info</string>
 </resources>
