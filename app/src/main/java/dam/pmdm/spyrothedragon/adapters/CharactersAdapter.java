@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +36,19 @@ public class CharactersAdapter extends RecyclerView.Adapter<CharactersAdapter.Ch
         // Cargar la imagen (simulado con un recurso drawable)
         int imageResId = holder.itemView.getContext().getResources().getIdentifier(character.getImage(), "drawable", holder.itemView.getContext().getPackageName());
         holder.imageImageView.setImageResource(imageResId);
+
+        // Detectar la pulsación larga solo en el primer ítem (posición 0)
+        if (position == 0) {
+            holder.itemView.setOnLongClickListener(v -> {
+                // Aquí defines lo que sucede cuando el primer item es mantenido pulsado
+                Toast.makeText(v.getContext(), "¡Pulsación larga en el primer item!", Toast.LENGTH_SHORT).show();
+                // Retorna true para indicar que el evento ha sido manejado
+                return true;
+            });
+        } else {
+            // Aseguramos que el primer item no reciba este listener
+            holder.itemView.setOnLongClickListener(null);
+        }
     }
 
     @Override

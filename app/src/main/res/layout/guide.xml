@@ -9,6 +9,14 @@
     android:clickable="true"
     android:focusable="true">
 
+    <View
+        android:id="@+id/guide_highlight"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/circle_purple"
+        android:visibility="gone"
+        android:layout_gravity="top"
+        android:elevation="10dp"/>
     <ImageView
         android:id="@+id/pulseImage"
         android:layout_width="100dp"
@@ -18,40 +26,6 @@
         android:visibility="gone"
         tools:ignore="RtlHardcoded" />
 
-    <ImageView
-        android:id="@+id/pulseImage2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="bottom|center"
-        android:src="@drawable/pulse"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/pulseImage3"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="bottom|right"
-        android:src="@drawable/pulse"
-        android:visibility="gone"
-        tools:ignore="RtlHardcoded" />
-
-    <ImageView
-        android:id="@+id/pulseImage4"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="top|right"
-        android:src="@drawable/pulse"
-        android:visibility="gone"
-        tools:ignore="RtlHardcoded" />
-
-    <ImageView
-        android:id="@+id/arrowIndicator"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/ic_arrow"
-        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textStep"
@@ -66,7 +40,8 @@
         android:text="Hola"
         android:textColor="@color/white"
         android:textSize="26sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:fontFamily="@font/inzomniac"/>
 
 
     <android.widget.Button
@@ -81,7 +56,8 @@
         android:textColor="#FFFFFF"
         android:visibility="gone"
         tools:ignore="RtlHardcoded"
-        android:background="@drawable/btn_skip"/>
+        android:background="@drawable/btn_skip"
+        android:fontFamily="@font/inzomniac"/>
 
 
     <android.widget.Button
@@ -96,7 +72,24 @@
         android:padding="20dp"
         android:text="SIGUIENTE"
         android:textColor="@color/white"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:fontFamily="@font/inzomniac"/>
+
+    <include
+        android:id="@+id/includeLayoutWelcomeGuide"
+        layout="@layout/welcomeguide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+      />
+    <ImageView
+        android:id="@+id/arrowIndicator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/arrow"
+        android:visibility="gone"
+        android:layout_gravity="top"
+        android:adjustViewBounds="true"/>
 
 
 </FrameLayout>

@@ -1,9 +1,11 @@
 package dam.pmdm.spyrothedragon.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,11 +39,13 @@ public class CollectiblesFragment extends Fragment {
         recyclerView = binding.recyclerViewCollectibles;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         collectiblesList = new ArrayList<>();
-        adapter = new CollectiblesAdapter(collectiblesList);
+        adapter = new CollectiblesAdapter(collectiblesList, getContext());
         recyclerView.setAdapter(adapter);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         loadCollectibles();
         return binding.getRoot();
+
+
     }
 
     @Override
@@ -50,6 +54,11 @@ public class CollectiblesFragment extends Fragment {
         binding = null;
     }
 
+    public void mostrarEasterEgg(){
+        Toast.makeText(getContext(), "Easter Egg", Toast.LENGTH_SHORT).show();
+
+
+    }
     private void loadCollectibles() {
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.collectibles);
