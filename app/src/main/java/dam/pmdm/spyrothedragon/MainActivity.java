@@ -9,7 +9,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,11 +52,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // Configurar la Toolbar personalizada
-        setSupportActionBar(binding.toolbar);
+        configureToolbar();
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
 
         // Configuración de NavController y BottomNavigationView
         Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
@@ -73,24 +69,10 @@ public class MainActivity extends AppCompatActivity {
         //Obtener preferencias de usuarios para mostrar o no la guía
         needGuide = getBooleanFromSharedPreferences();
         if (needGuide) {
+            startGuide();
 
-            // Inflar la guía usando el layout @layout/guide
-            guideBinding = GuideBinding.inflate(getLayoutInflater());
-
-            // Inicializamos los bindings para la guía y la pantalla de bienvenida
-            welcomeguideBinding = WelcomeguideBinding.inflate(getLayoutInflater());
-            guideBinding = GuideBinding.inflate(getLayoutInflater());
-
-            // Agregar la pantalla de bienvenida al layout principal
-            rootLayout = findViewById(R.id.mainFrame);
-            rootLayout.addView(welcomeguideBinding.getRoot());
-            welcomeguideBinding.getRoot().setVisibility(View.VISIBLE);
-
-
-            guideBinding.getRoot().setVisibility(View.VISIBLE);
-            // Hacer visible la guía al pulsar el botón de inicio
-            welcomeguideBinding.btnStart.setOnClickListener(v -> configureGuide());
         }
+        //Animación de cambio de fragment
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             View fragmentContainer = findViewById(R.id.navHostFragment);
             if (fragmentContainer != null) {
@@ -101,6 +83,38 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Comienzo de la guía
+     */
+    private void startGuide() {
+        // Inflar la guía usando el layout @layout/guide
+        guideBinding = GuideBinding.inflate(getLayoutInflater());
+
+        // Inicializamos los bindings para la guía y la pantalla de bienvenida
+        welcomeguideBinding = WelcomeguideBinding.inflate(getLayoutInflater());
+        guideBinding = GuideBinding.inflate(getLayoutInflater());
+
+        // Agregar la pantalla de bienvenida al layout principal
+        rootLayout = findViewById(R.id.mainFrame);
+        rootLayout.addView(welcomeguideBinding.getRoot());
+        welcomeguideBinding.getRoot().setVisibility(View.VISIBLE);
+
+
+        guideBinding.getRoot().setVisibility(View.VISIBLE);
+        // Hacer visible la guía al pulsar el botón de inicio
+        welcomeguideBinding.btnStart.setOnClickListener(v -> configureGuide());
+    }
+
+    private void configureToolbar() {
+        setSupportActionBar(binding.toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    /**
+     * Música de fondo
+     */
     private void musicOn() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -114,11 +128,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Recuperar boolean de sharedPreferences
+     */
     private boolean getBooleanFromSharedPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
         return sharedPreferences.getBoolean("needGuide", true); // Devuelve true por defecto si no existe
     }
+
 
     private void configureGuide() {
         // Crear animación de desvanecimiento
@@ -137,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 welcomeguideBinding.particleView.setVisibility(View.VISIBLE); // Asegúrate de que las partículas sean visibles
                 guideBinding.btnNext.setVisibility(View.VISIBLE);
                 guideBinding.btnExit.setVisibility(View.VISIBLE);
+
                 // Asignar los listeners para los botones después de que la animación termine
                 guideBinding.btnExit.setOnClickListener(v -> exitGuide(v));
                 guideBinding.btnNext.setOnClickListener(v -> nextGuideStep());
@@ -149,6 +167,9 @@ public class MainActivity extends AppCompatActivity {
         fadeOut.start();
     }
 
+    /**
+     * Pasos de la guía
+     */
     private void nextGuideStep() {
         // Reproducir el sonido de clic al cambiar de paso
         if (mediaPlayer != null) {
@@ -158,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer = MediaPlayer.create(this, R.raw.clickaudio);
         mediaPlayer.start();
 
+        //Al pulsar el botón siguiente el paso va sumando y pasando por los distintos casos.
         switch (currentStep) {
             case 0:
                 showGuideStep(guideBinding.pulseImage, getString(R.string.guideText1), R.id.navigation_characters, 0);
@@ -199,7 +221,9 @@ public class MainActivity extends AppCompatActivity {
         currentStep++; // Avanzar al siguiente paso
     }
 
-
+    /**
+     * Aplica animación de pulseImage
+     */
     private void movePulseImage(int index) {
         binding.navView.post(() -> {
             // Obtener el item del BottomNavigationView
@@ -208,28 +232,30 @@ public class MainActivity extends AppCompatActivity {
                 View item = menuItemView.getChildAt(index);
                 if (item != null) {
                     // Espera hasta que la imagen esté disponible para obtener su tamaño
-                    guideBinding.pulseImage.post(() -> {
-                        // Obtener las coordenadas del item
-                        Rect itemRect = new Rect();
-                        item.getGlobalVisibleRect(itemRect);
 
-                        // Calcular la posición X centrada en el ítem
-                        float pulseX = itemRect.centerX() - (guideBinding.pulseImage.getWidth() / 2f);
+                    // Obtener las coordenadas del item
+                    Rect itemRect = new Rect();
+                    item.getGlobalVisibleRect(itemRect);
 
-                        // Calcular la posición Y justo encima del BottomNavigationView
-                        float pulseY = itemRect.top - guideBinding.pulseImage.getHeight() - (-50f);
+                    // Calcular la posición X centrada en el ítem
+                    float pulseX = itemRect.centerX() - (guideBinding.pulseImage.getWidth() / 2f);
 
-                        // Mostrar y posicionar la imagen
-                        guideBinding.pulseImage.setVisibility(View.VISIBLE);
-                        guideBinding.pulseImage.setX(pulseX);
-                        guideBinding.pulseImage.setY(pulseY);
-                    });
+                    // Calcular la posición Y justo encima del BottomNavigationView
+                    float pulseY = itemRect.top - guideBinding.pulseImage.getHeight() - (-50f);
+
+                    // Mostrar y posicionar la imagen
+                    guideBinding.pulseImage.setVisibility(View.VISIBLE);
+                    guideBinding.pulseImage.setX(pulseX);
+                    guideBinding.pulseImage.setY(pulseY);
+
                 }
             }
         });
     }
 
-
+    /**
+     * Hace que pulseImage aparezca arriba a la derecha.
+     */
     private void movePulseImageToTopRight() {
         guideBinding.pulseImage.post(() -> {
             int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -250,6 +276,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Mueve la flecha de izquierda a derecha
+     */
     private void moveArrowTo(int index) {
 
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -363,13 +392,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Método para saltar la guía y guardar en sharedPreferences para no volver a mostra la guía.
+     */
     private void exitGuide(View view) {
         guideBinding.guideLayout.setVisibility(View.INVISIBLE);
         needGuide = false;
         saveBooleanToSharedPreferences(needGuide);
     }
 
+    /**
+     * Guardar preferencia de boolean en sharedPreferences
+     */
     private void saveBooleanToSharedPreferences(boolean value) {
         SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -377,6 +411,9 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    /**
+     * Navegación entre BottomNavigationView.
+     */
     private boolean selectedBottomMenu(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.nav_characters) {
             navController.navigate(R.id.navigation_characters);

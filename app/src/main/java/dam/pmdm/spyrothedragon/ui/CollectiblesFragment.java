@@ -54,11 +54,12 @@ public class CollectiblesFragment extends Fragment {
         binding = null;
     }
 
-    public void mostrarEasterEgg(){
+    public void mostrarEasterEgg() {
         Toast.makeText(getContext(), "Easter Egg", Toast.LENGTH_SHORT).show();
 
 
     }
+
     private void loadCollectibles() {
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.collectibles);

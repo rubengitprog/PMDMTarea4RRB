@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SpyroTheDragon</string>
+    <string name="worlds">Worlds</string>
+    <string name="characters">Personajes</string>
+    <string name="collectibles">Collectibles</string>
+    <string name="title_about">About</string>
+    <string name="text_about">"Application developed by <b>Rubén Robles Berlanga.</b> "</string>
+    <string name="accept">Accept</string>
+    <string name="guideText1">Here you can explore all the characters in the world of Spyro.</string>
+    <string name="guideText2">Discover the worlds of Spyro</string>
+    <string name="guideText3">Find all the collectibles</string>
+    <string name="guideText4">Here you will find more information about the app</string>
+    <string name="guideText5">Congratulations, you have completed the guide!</string>
+    <string name="endText">FINISH</string>
+    <string name="skip">SKIP</string>
+    <string name="next">NEXT</string>
+    <string name="welcome">Welcome to Spyro\'s Guide!</string>
+    <string name="start">Start</string>
+    <string name="info">Info</string>
 </resources>

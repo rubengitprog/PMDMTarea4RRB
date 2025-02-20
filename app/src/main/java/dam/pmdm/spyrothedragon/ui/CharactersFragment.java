@@ -55,7 +55,7 @@ public class CharactersFragment extends Fragment {
 
     private void loadCharacters() {
         try {
-            // Cargamos el archivo XML desde res/xml (NOTA: ahora se usa R.xml.characters)
+            // Cargamos el archivo XML desde res/xml
             InputStream inputStream = getResources().openRawResource(R.raw.characters);
 
             // Crear un parser XML

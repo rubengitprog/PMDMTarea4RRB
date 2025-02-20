@@ -13,10 +13,11 @@
         android:id="@+id/guide_highlight"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:background="@drawable/circle_purple"
-        android:visibility="gone"
         android:layout_gravity="top"
-        android:elevation="10dp"/>
+        android:background="@drawable/circle_purple"
+        android:elevation="10dp"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/pulseImage"
         android:layout_width="100dp"
@@ -34,14 +35,14 @@
         android:layout_gravity="center"
         android:layout_margin="50dp"
         android:background="@drawable/pulse"
+        android:fontFamily="@font/inzomniac"
         android:gravity="center"
         android:maxLines="4"
         android:padding="20dp"
         android:text="..."
         android:textColor="@color/white"
         android:textSize="26sp"
-        android:visibility="gone"
-        android:fontFamily="@font/inzomniac"/>
+        android:visibility="gone" />
 
 
     <android.widget.Button
@@ -51,13 +52,13 @@
         android:layout_gravity="top|left"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="50dp"
+        android:background="@drawable/btn_skip"
+        android:fontFamily="@font/inzomniac"
         android:padding="20dp"
         android:text="@string/skip"
         android:textColor="#FFFFFF"
         android:visibility="gone"
-        tools:ignore="RtlHardcoded"
-        android:background="@drawable/btn_skip"
-        android:fontFamily="@font/inzomniac"/>
+        tools:ignore="RtlHardcoded" />
 
 
     <android.widget.Button
@@ -69,27 +70,27 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/btn_next"
+        android:fontFamily="@font/inzomniac"
         android:padding="20dp"
         android:text="@string/next"
         android:textColor="@color/white"
-        android:visibility="gone"
-        android:fontFamily="@font/inzomniac"/>
+        android:visibility="gone" />
 
     <include
         android:id="@+id/includeLayoutWelcomeGuide"
         layout="@layout/welcomeguide"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-      />
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/arrowIndicator"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/arrow"
-        android:visibility="gone"
         android:layout_gravity="top"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:src="@drawable/arrow"
+        android:visibility="gone" />
 
 
 </FrameLayout>
